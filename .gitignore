@@ -1,0 +1,15 @@
+# Enviroments
+**/.venv
+**/venv
+**/env
+**/.env
+!**/.env.example
+
+# cache
+**/__pycache__
+
+**/.pytest_cache
+
+# dependencias
+**/node_modules
+**/lib
