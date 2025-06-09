@@ -28,14 +28,6 @@ async def list_users(service:UserService = Depends(get_user_service)):
 async def get_user(user_id: int, service: UserService = Depends(get_user_service)):
     return await service.get(user_id)
 
-@router.get(
-    "/email/{user_email}",
-    response_model=UserRead,
-    tags=["get_by"]
-)
-async def get_user_by_email(user_email: str, service: UserService = Depends(get_user_service)):
-    return await service.get_by_email(user_email)
-
 @router.post(
     "/",
     response_model=UserRead,
