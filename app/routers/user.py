@@ -29,7 +29,7 @@ async def get_user(user_id: int, service: UserService = Depends(get_user_service
     return await service.get(user_id)
 
 @router.get(
-    "/{user_email}/",
+    "/email/{user_email}",
     response_model=UserRead,
     tags=["get_by"]
 )
