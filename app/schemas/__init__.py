@@ -5,11 +5,14 @@ from .user import (
     UserInDb,
     UserAuth
 )
+from .token import Token,TokenData
 
 __all__ = [
     'UserRead',
     'UserCreate',
     'UserUpdate',
     'UserInDb',
-    'UserAuth'
+    'UserAuth',
+    'Token',
+    'TokenData'
 ]

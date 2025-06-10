@@ -1,5 +1,5 @@
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field,ConfigDict,model_validator
+from pydantic import BaseModel, EmailStr, Field,ConfigDict
 
 class UserBase(BaseModel):
     email: EmailStr
@@ -21,7 +21,8 @@ class UserAuth(BaseModel):
 
 class UserInDb(BaseModel):
     id: int
-    password_hash: str
+    email:str
+    hashed_password: str
 
 class UserRead(UserBase):
     id: int
