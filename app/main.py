@@ -6,6 +6,7 @@ from app.conf import get_settings
 from app.routers import (
     user_router,
     auth_router,
+    role_router
 )
 
 app = FastAPI(lifespan=lifespan)
@@ -18,6 +19,7 @@ app.swagger_ui_parameters = {
 
 app.include_router(user_router)
 app.include_router(auth_router)
+app.include_router(role_router)
 
 add_pagination(app)
 

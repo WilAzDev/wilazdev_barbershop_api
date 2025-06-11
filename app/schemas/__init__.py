@@ -6,6 +6,7 @@ from .user import (
     UserAuth
 )
 from .token import Token,TokenData
+from .role import RoleRead, RoleCreate, RoleUpdate
 
 __all__ = [
     'UserRead',
@@ -14,5 +15,8 @@ __all__ = [
     'UserInDb',
     'UserAuth',
     'Token',
-    'TokenData'
+    'TokenData',
+    'RoleRead',
+    'RoleCreate',
+    'RoleUpdate'
 ]
