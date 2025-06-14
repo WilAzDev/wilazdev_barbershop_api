@@ -1,6 +1,5 @@
 from typing import Dict
 from fastapi import APIRouter, Depends,status,Response
-from fastapi.responses import JSONResponse
 from fastapi_pagination import Page
 
 from app.schemas import (
@@ -57,10 +56,7 @@ async def get_me(
     auth:Auth,
     service:UserService = Depends(get_user_service)
 ):
-    try:
-        return await service.get(auth.id)
-    except Exception as e:
-        return JSONResponse(content={"error":str(e)},status_code=status.HTTP_404_NOT_FOUND)
+    return await service.get(auth.id)
 
 @router.post(
     "/",
@@ -72,10 +68,7 @@ async def create_user(
     payload: UserCreate, 
     service: UserService = Depends(get_user_service)
 ):
-    try:
-        return await service.create(payload)
-    except Exception as e:
-        return JSONResponse(content={"error": str(e)},status_code=status.HTTP_400_BAD_REQUEST)
+    return await service.create(payload)
 
 @router.put(
     "/{user_id}",

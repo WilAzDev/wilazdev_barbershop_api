@@ -1,6 +1,5 @@
 from typing import Dict
 from fastapi import APIRouter,Depends,status,Response
-from fastapi.responses import JSONResponse
 from fastapi_pagination import Page
 
 from app.schemas import (
@@ -49,6 +48,30 @@ async def get_permission(
 ):
     return await service.get(role_id)
 
+@router.get(
+    "/role/{role_id}",
+    response_model=Page[PermissionRead],
+    tags=["roles"],
+)
+async def get_permissions_by_role(
+    auth: Auth,
+    role_id: int,
+    service: PermissionService = Depends(get_permission_service)
+):
+    return await service.get_role_permissions(role_id)
+
+@router.get(
+    "/user/{user_id}",
+    response_model=Page[PermissionRead],
+    tags=["users"],
+)
+async def get_permissions_by_user(
+    auth: Auth,
+    user_id: int,
+    service: PermissionService = Depends(get_permission_service)
+):
+    return await service.get_user_permissions(user_id)
+
 @router.post(
     "/",
     response_model=PermissionRead,
@@ -60,7 +83,7 @@ async def create_permission(
     permission: PermissionCreate,
     service: PermissionService = Depends(get_permission_service)
 ):
-    return await service.create(auth, permission)
+    return await service.create(permission)
 
 @router.post(
     "/role/{role_id}/sync",

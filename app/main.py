@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi_pagination import add_pagination
 
 from app.events import lifespan
-from app.conf import get_settings
 from app.routers import (
     user_router,
     auth_router,
@@ -24,4 +23,3 @@ app.include_router(role_router)
 app.include_router(permission_router)
 
 add_pagination(app)
-

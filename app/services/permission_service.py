@@ -13,6 +13,7 @@ class PermissionService(AsyncCrudService[Permission,PermissionRead,PermissionCre
         super().__init__(
             model=Permission,
             repo=self.repo,
+            session=session,
             read_schema=PermissionRead,
             create_schema=PermissionCreate,
             update_schema=PermissionUpdate

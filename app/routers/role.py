@@ -1,5 +1,5 @@
 from typing import Dict
-from fastapi import APIRouter, Depends,status,Response
+from fastapi import APIRouter, Depends,status,Response,HTTPException
 from fastapi_pagination import Page
 
 from app.schemas import (
@@ -47,6 +47,18 @@ async def get_role(
     service: RoleService = Depends(get_role_service)
 ):
     return await service.get(role_id)
+
+@router.get(
+    "/user/{user_id}",
+    response_model=Page[RoleRead],
+    tags=["users"]
+)
+async def get_user_roles(
+    auth:Auth,
+    user_id: int,
+    service: RoleService = Depends(get_role_service)
+):
+    return await service.get_user_roles(user_id)
 
 @router.post(
     "/",
