@@ -1,7 +1,9 @@
 from .conf import (
-    CurrentUser
+    Auth,
+    CurrentUser,
 )
 
 __all__ = [
+    'Auth',
     'CurrentUser'
 ]

@@ -1,4 +1,4 @@
-from typing import Dict,Annotated
+from typing import Dict
 from fastapi import APIRouter, Depends,status,Response
 from fastapi.responses import JSONResponse
 from fastapi_pagination import Page
@@ -7,27 +7,23 @@ from app.schemas import (
     UserRead,
     UserCreate,
     UserUpdate,
-    TokenData
 )
 from app.services import UserService
 from app.dependencies import get_user_service
-from app.security import CurrentUser
+from app.security import Auth
 
 router = APIRouter(prefix="/users",tags=["users"])
 
 @router.get(
     "/",
     response_model=Page[UserRead],
-    tags=["get_list"]
+    tags=["get_list"],
 )
 async def list_users(
-    current_user:CurrentUser,
+    auth:Auth,
     service:UserService = Depends(get_user_service)
 ):
-    try:
-        return await service.count()
-    except Exception as e:
-        return JSONResponse(content={"error":str(e)},status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return await service.list()
 
 @router.get(
     "/count",
@@ -35,7 +31,7 @@ async def list_users(
     tags=["get_count"]
 )
 async def count_users(
-    current_user:CurrentUser,
+    auth:Auth,
     service:UserService = Depends(get_user_service)
 ):
     return await service.count()
@@ -46,7 +42,7 @@ async def count_users(
     tags=["get_by"]
 )
 async def get_user(
-    current_user:CurrentUser,
+    auth:Auth,
     user_id: int, 
     service: UserService = Depends(get_user_service)
 ):
@@ -58,11 +54,11 @@ async def get_user(
     tags=['auth']
 )
 async def get_me(
-    current_user:CurrentUser,
+    auth:Auth,
     service:UserService = Depends(get_user_service)
 ):
     try:
-        return await service.get(current_user.id)
+        return await service.get(auth.id)
     except Exception as e:
         return JSONResponse(content={"error":str(e)},status_code=status.HTTP_404_NOT_FOUND)
 
@@ -87,7 +83,7 @@ async def create_user(
     tags=["update"]
 )
 async def update_user(
-    current_user:CurrentUser,
+    auth:Auth,
     user_id: int, 
     payload: UserUpdate, 
     service: UserService = Depends(get_user_service)
@@ -100,7 +96,7 @@ async def update_user(
     tags=["delete"]
 )
 async def delete_user(
-    current_user:CurrentUser,
+    auth:Auth,
     user_id: int, 
     service: UserService = Depends(get_user_service)
 ):

@@ -12,6 +12,12 @@ from .role import (
     RoleUpdate,
     RoleSync
 )
+from .permission import (
+    PermissionRead,
+    PermissionCreate,
+    PermissionUpdate,
+    PermissionSync
+)
 
 __all__ = [
     'UserRead',
@@ -24,5 +30,9 @@ __all__ = [
     'RoleRead',
     'RoleCreate',
     'RoleUpdate',
-    'RoleSync'
+    'RoleSync',
+    'PermissionRead',
+    'PermissionCreate',
+    'PermissionUpdate',
+    'PermissionSync'
 ]

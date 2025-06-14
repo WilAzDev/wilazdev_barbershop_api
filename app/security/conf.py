@@ -7,7 +7,9 @@ from app.schemas import (TokenData)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+Auth = Annotated[str, Depends(oauth2_scheme)]
+
+async def get_current_user(token: Auth ):
     current_user = AuthService().decode_access_token(token)
     if not current_user:
         raise HTTPException(

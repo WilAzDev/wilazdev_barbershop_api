@@ -16,12 +16,12 @@ class RoleRepository(SQLModelRepository[Role]):
     async def add_user_missing_roles(self,user_id:int,roles_id:List[int]):
         query = self.get_user_roles_query(user_id)
         
-        roles = await self.session.exec(query)
-        current_roles_id = [role.id for role in roles]
+        existing_roles = await self.session.exec(query)
+        current_roles_id = [r.id for r in existing_roles]
         roles_to_add_id = set(roles_id) - set(current_roles_id)
         roles_to_add = [
-            UserHasRole(user_id=user_id,role_id=role_id)
-            for role_id in roles_to_add_id
+            UserHasRole(user_id=user_id,role_id=r_id)
+            for r_id in roles_to_add_id
         ]
         self.session.add_all(roles_to_add)
         await self.session.commit()
