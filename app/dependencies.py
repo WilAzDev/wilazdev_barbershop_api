@@ -15,4 +15,4 @@ async def get_user_service(
 async def get_role_service(
     session: AsyncSession = Depends(get_async_session)
 ) -> RoleService:
-    return RoleService(session)  
+    return RoleService(session)

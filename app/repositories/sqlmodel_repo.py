@@ -15,8 +15,9 @@ class SQLModelRepository(Generic[ModelType]):
     
     async def get_count(self)->int:
         statement = select(func.count()).select_from(self.model)
-        result = await self.session.execute(statement)
-        return result.scalar_one()
+        result = await self.session.exec(statement)
+        count = result.first() 
+        return count
     
     async def get_by_id(self,item_id:int) -> Optional[ModelType]:
         return await self.session.get(self.model,item_id)

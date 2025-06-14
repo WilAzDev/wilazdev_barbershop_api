@@ -12,10 +12,10 @@ class UserService(AsyncCrudService[User,UserRead,UserCreate,UserUpdate]):
         self,
         session: AsyncSession,
     ):
-        repo = UserRepository(session)
+        self.repo = UserRepository(session)
         super().__init__(
             model=User,
-            repo=repo,
+            repo=self.repo,
             session=session,
             read_schema=UserRead,
             create_schema=UserCreate,
@@ -33,7 +33,6 @@ class UserService(AsyncCrudService[User,UserRead,UserCreate,UserUpdate]):
     
     async def authenticate_user(self,payload:UserAuth)-> UserInDb:
         user = await self.repo.get_by_email(payload.email)
-        data = user.model_dump()
         user_db = UserInDb.model_validate(user,from_attributes=True)
         if not AuthService().verify_password(
             payload.password,

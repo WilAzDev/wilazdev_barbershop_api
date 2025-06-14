@@ -1,4 +1,4 @@
-from typing import Dict,Annotated
+from typing import Dict,Annotated,List
 from fastapi import APIRouter, Depends,status,Response
 from fastapi.responses import JSONResponse
 from fastapi_pagination import Page
@@ -7,11 +7,12 @@ from app.schemas import (
     RoleRead,
     RoleCreate,
     RoleUpdate,
-    TokenData
+    TokenData,
+    RoleSync
 )
 from app.services import RoleService
 from app.dependencies import get_role_service
-from app.security import get_current_user
+from app.security import CurrentUser
 
 router = APIRouter(prefix="/roles",tags=["roles"])
 
@@ -21,7 +22,7 @@ router = APIRouter(prefix="/roles",tags=["roles"])
     tags=["get_list"],
 )
 async def get_roles(
-    current_user:Annotated[TokenData, Depends(get_current_user)],
+    current_user:CurrentUser,
     service: RoleService = Depends(get_role_service)
 ):
     return await service.list()
@@ -32,7 +33,7 @@ async def get_roles(
     tags=["get_by"]
 )
 async def get_role(
-    current_user:Annotated[TokenData, Depends(get_current_user)],
+    current_user:CurrentUser,
     role_id: int,
     service: RoleService = Depends(get_role_service)
 ):
@@ -45,11 +46,24 @@ async def get_role(
     status_code=status.HTTP_201_CREATED
 )
 async def create_role(
-    current_user:Annotated[TokenData, Depends(get_current_user)],
+    current_user:CurrentUser,
     role: RoleCreate,
     service: RoleService = Depends(get_role_service)
 ):
     return await service.create(role)
+
+@router.post(
+    "/user/{user_id}/sync",
+    response_model=Page[RoleRead],
+    tags=["user_roles"]
+)
+async def sync_user_roles(
+    current_user:CurrentUser,
+    user_id: int,
+    payload:RoleSync,
+    service: RoleService = Depends(get_role_service)
+):
+    return await service.sync_roles(user_id, payload)
 
 @router.put(
     "/{role_id}",
@@ -57,7 +71,7 @@ async def create_role(
     tags=["update"]
 )
 async def update_role(
-    current_user:Annotated[TokenData, Depends(get_current_user)],
+    current_user:CurrentUser,
     role_id: int,
     payload: RoleUpdate,
     service: RoleService = Depends(get_role_service)
@@ -70,7 +84,7 @@ async def update_role(
     tags=["delete"]
 )
 async def delete_role(
-    current_user:Annotated[TokenData, Depends(get_current_user)],
+    current_user:CurrentUser,
     role_id: int,
     service: RoleService = Depends(get_role_service)
 ):

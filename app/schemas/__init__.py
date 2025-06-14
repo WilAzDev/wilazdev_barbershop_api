@@ -6,7 +6,12 @@ from .user import (
     UserAuth
 )
 from .token import Token,TokenData
-from .role import RoleRead, RoleCreate, RoleUpdate
+from .role import (
+    RoleRead, 
+    RoleCreate, 
+    RoleUpdate,
+    RoleSync
+)
 
 __all__ = [
     'UserRead',
@@ -18,5 +23,6 @@ __all__ = [
     'TokenData',
     'RoleRead',
     'RoleCreate',
-    'RoleUpdate'
+    'RoleUpdate',
+    'RoleSync'
 ]

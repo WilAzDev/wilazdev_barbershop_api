@@ -3,6 +3,7 @@ from fastapi import Depends, status,HTTPException
 from fastapi.security import OAuth2PasswordBearer
 
 from app.services import AuthService
+from app.schemas import (TokenData)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
@@ -14,3 +15,5 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
             detail="Invalid authentication credentials",
         )
     return current_user
+
+CurrentUser = Annotated[TokenData, Depends(get_current_user)]

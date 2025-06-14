@@ -11,7 +11,7 @@ from app.schemas import (
 )
 from app.services import UserService
 from app.dependencies import get_user_service
-from app.security import get_current_user
+from app.security import CurrentUser
 
 router = APIRouter(prefix="/users",tags=["users"])
 
@@ -21,10 +21,24 @@ router = APIRouter(prefix="/users",tags=["users"])
     tags=["get_list"]
 )
 async def list_users(
-    current_user:Annotated[TokenData,Depends(get_current_user)],
+    current_user:CurrentUser,
     service:UserService = Depends(get_user_service)
 ):
-    return await service.list()
+    try:
+        return await service.count()
+    except Exception as e:
+        return JSONResponse(content={"error":str(e)},status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@router.get(
+    "/count",
+    response_model=int,
+    tags=["get_count"]
+)
+async def count_users(
+    current_user:CurrentUser,
+    service:UserService = Depends(get_user_service)
+):
+    return await service.count()
 
 @router.get(
     "/{user_id}",
@@ -32,7 +46,7 @@ async def list_users(
     tags=["get_by"]
 )
 async def get_user(
-    current_user:Annotated[TokenData,Depends(get_current_user)],
+    current_user:CurrentUser,
     user_id: int, 
     service: UserService = Depends(get_user_service)
 ):
@@ -44,7 +58,7 @@ async def get_user(
     tags=['auth']
 )
 async def get_me(
-    current_user:Annotated[TokenData,Depends(get_current_user)],
+    current_user:CurrentUser,
     service:UserService = Depends(get_user_service)
 ):
     try:
@@ -60,7 +74,8 @@ async def get_me(
 )
 async def create_user(
     payload: UserCreate, 
-    service: UserService = Depends(get_user_service)):
+    service: UserService = Depends(get_user_service)
+):
     try:
         return await service.create(payload)
     except Exception as e:
@@ -72,7 +87,7 @@ async def create_user(
     tags=["update"]
 )
 async def update_user(
-    current_user:Annotated[TokenData,Depends(get_current_user)],
+    current_user:CurrentUser,
     user_id: int, 
     payload: UserUpdate, 
     service: UserService = Depends(get_user_service)
@@ -85,7 +100,7 @@ async def update_user(
     tags=["delete"]
 )
 async def delete_user(
-    current_user:Annotated[TokenData,Depends(get_current_user)],
+    current_user:CurrentUser,
     user_id: int, 
     service: UserService = Depends(get_user_service)
 ):

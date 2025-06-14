@@ -1,5 +1,5 @@
-from typing import Optional
-from pydantic import BaseModel,ConfigDict
+from typing import Optional,List
+from pydantic import BaseModel,ConfigDict,Field
 
 class RoleBase(BaseModel):
     name: str
@@ -15,3 +15,6 @@ class RoleRead(RoleBase):
     id: int
     
     model_config = ConfigDict(from_attributes=True)
+    
+class RoleSync(BaseModel):
+    roles_id: List[int] = Field(default_factory=list)

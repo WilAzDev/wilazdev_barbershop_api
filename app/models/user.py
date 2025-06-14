@@ -10,4 +10,4 @@ class User(SQLModel, table=True):
     is_active: bool = Field(sa_column_kwargs={"default": True})
     hashed_password: str = Field(sa_column_kwargs={"nullable": False})
     
-    roles : List["Role"] = Relationship(back_populates="user",link_model=UserHasRole)
+    roles : List["Role"] = Relationship(back_populates="users",link_model=UserHasRole,cascade_delete=True)
