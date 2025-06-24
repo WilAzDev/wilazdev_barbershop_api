@@ -1,3 +1,4 @@
+from typing import List
 from functools import lru_cache
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings,SettingsConfigDict
@@ -20,6 +21,8 @@ class Settings(BaseSettings):
     db_port: int
     
     admin_email: str
+    
+    origins : List[str]
     
     @property
     def db_url(self):
