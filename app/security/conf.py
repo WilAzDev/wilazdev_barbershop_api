@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from app.services import AuthService
 from app.schemas import (TokenData)
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/auth/login")
 
 Auth = Annotated[str, Depends(oauth2_scheme)]
 
